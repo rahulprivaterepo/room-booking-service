@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RoomBookingRepository extends JpaRepository<RoomEntity, Long> {
+public interface RoomsRepository extends JpaRepository<RoomEntity, Long> {
     Optional<List<RoomEntity>> findByRoomTypeAndIsBookedFalseAndCheckInDateAfterAndCheckOutDateBefore(
             Integer roomType, LocalDateTime checkInDate, LocalDateTime checkOutDate);
 
     Optional<Long> deleteByRoomNumber(Integer roomNumber);
+
+    Optional<RoomEntity> findByRoomNumber(Integer roomNumber);
 }

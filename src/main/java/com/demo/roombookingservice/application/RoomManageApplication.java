@@ -3,11 +3,10 @@ package com.demo.roombookingservice.application;
 import com.demo.roombookingservice.controller.request.RoomAddRequest;
 import com.demo.roombookingservice.controller.request.RoomRemoveRequest;
 import com.demo.roombookingservice.controller.response.RoomAddResponse;
-import com.demo.roombookingservice.domain.dto.RoomType;
-import com.demo.roombookingservice.domain.entity.RoomEntity;
-import com.demo.roombookingservice.exception.RoomBookingPersistenceException;
+import com.demo.roombookingservice.exception.RoomAddException;
 import com.demo.roombookingservice.exception.RoomRemovalException;
-import com.demo.roombookingservice.repository.RoomBookingRepository;
+import com.demo.roombookingservice.repository.RoomsRepository;
+import com.demo.roombookingservice.util.BuilderUtil;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,44 +18,38 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class RoomManageApplication {
 
-    private final RoomBookingRepository roomBookingRepository;
+    private final RoomsRepository roomsRepository;
 
     public RoomAddResponse addRooms(@NotNull final RoomAddRequest request) {
-        final var roomEntity = buildRoomEntity(request);
+        final var roomEntity = BuilderUtil.buildRoomEntity(request);
         try {
-            final var roomAdded = roomBookingRepository.save(roomEntity);
-            return buildRoomAddResponse(roomAdded);
+            final var roomAdded = roomsRepository.save(roomEntity);
+            return BuilderUtil.buildRoomAddResponse(roomAdded);
         } catch (Exception e) {
             log.error("Error Occurred while persisting data to DB", e);
-            throw new RoomBookingPersistenceException(e.getMessage(), e);
+            throw new RoomAddException(e.getMessage(), e);
         }
     }
+
+    /*public Long modifyRooms(@NotNull final RoomModifyRequest roomModifyRequest) {
+        try {
+            final var roomEntity = roomsRepository.findByRoomNumber(
+                    roomModifyRequest.getRoomNo()).orElseThrow(() -> new RecordNotFoundException("Record Not Found in DB")
+            );
+            roomEntity.setRoomType(roomModifyRequest.getRoomType().getRoomTypeId());
+        } catch (Exception e) {
+            log.error("Error Occurred while persisting data to DB", e);
+            throw new RoomAddException(e.getMessage(), e);
+        }
+    }*/
 
     @Transactional
     public void removeRooms(final RoomRemoveRequest roomRemoveRequest) {
         try {
-            roomBookingRepository.deleteByRoomNumber(roomRemoveRequest.getRoomNo()).orElseThrow();
+            roomsRepository.deleteByRoomNumber(roomRemoveRequest.roomNo()).orElseThrow();
         } catch (Exception e) {
             log.error("Error Occurred while removing room from the DB", e);
             throw new RoomRemovalException(e.getMessage(), e);
         }
-    }
-
-    private RoomEntity buildRoomEntity(@NotNull final RoomAddRequest roomAddRequest) {
-        return RoomEntity.builder()
-                .roomNumber(roomAddRequest.getRoomNo())
-                .roomType(roomAddRequest.getRoomType().getRoomTypeId())
-                .floor(roomAddRequest.getFloor())
-                .isBooked(roomAddRequest.getIsBooked())
-                .build();
-    }
-
-    private RoomAddResponse buildRoomAddResponse(@NotNull final RoomEntity roomAdded) {
-        return RoomAddResponse.builder()
-                .id(roomAdded.getId())
-                .floor(roomAdded.getFloor())
-                .roomNo(roomAdded.getRoomNumber())
-                .roomType(RoomType.getByRoomTypeId(roomAdded.getRoomType()))
-                .build();
     }
 }

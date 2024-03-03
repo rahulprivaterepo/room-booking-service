@@ -7,13 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RoomRemoveRequest {
-
-    @NotNull
-    @Valid
-    private Integer roomNo;
-}
+public record RoomRemoveRequest(
+        @NotNull @Valid Integer roomNo
+) {}

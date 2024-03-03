@@ -17,6 +17,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +29,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "rooms")
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class RoomEntity extends BaseEntity {

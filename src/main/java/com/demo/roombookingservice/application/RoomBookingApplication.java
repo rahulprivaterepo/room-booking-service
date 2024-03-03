@@ -2,7 +2,7 @@ package com.demo.roombookingservice.application;
 
 import com.demo.roombookingservice.controller.request.RoomBookingRequest;
 import com.demo.roombookingservice.exception.RoomsNotAvailableException;
-import com.demo.roombookingservice.repository.RoomBookingRepository;
+import com.demo.roombookingservice.repository.RoomsRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import static com.demo.roombookingservice.constants.ExceptionConstants.ROOMS_NOT
 @Slf4j
 public class RoomBookingApplication {
 
-    private RoomBookingRepository roomBookingRepository;
+    private final RoomsRepository roomsRepository;
 
     public void bookRoom(
             RoomBookingRequest roomBookingRequest
@@ -24,7 +24,7 @@ public class RoomBookingApplication {
         final var checkOutDate = roomBookingRequest.getCheckoutTime();
 
         // Retrieve Available Rooms
-        final var availableRooms = roomBookingRepository.
+        final var availableRooms = roomsRepository.
                 findByRoomTypeAndIsBookedFalseAndCheckInDateAfterAndCheckOutDateBefore(
                         roomType.getRoomTypeId(),
                         checkInDate,

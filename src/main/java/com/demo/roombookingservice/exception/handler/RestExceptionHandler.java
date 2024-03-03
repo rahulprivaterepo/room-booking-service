@@ -1,7 +1,7 @@
 package com.demo.roombookingservice.exception.handler;
 
 import com.demo.roombookingservice.domain.response.ResultInfo;
-import com.demo.roombookingservice.exception.RoomBookingPersistenceException;
+import com.demo.roombookingservice.exception.RoomAddException;
 import com.demo.roombookingservice.exception.RoomRemovalException;
 import com.demo.roombookingservice.exception.RoomsNotAvailableException;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.demo.roombookingservice.constants.ErrorResultInfoConstants.ROOMS_UNAVAILABLE_ERROR;
-import static com.demo.roombookingservice.constants.ErrorResultInfoConstants.ROOM_BOOKING_PERSISTENCE_ERROR;
+import static com.demo.roombookingservice.constants.ErrorResultInfoConstants.ROOM_ADD_ERROR;
 import static com.demo.roombookingservice.constants.ErrorResultInfoConstants.ROOM_REMOVAL_ERROR;
 
 @RestController
@@ -23,9 +23,9 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(ROOMS_UNAVAILABLE_ERROR, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = RoomBookingPersistenceException.class)
-    public ResponseEntity<ResultInfo> handleRoomBookingPersistenceException() {
-        return new ResponseEntity<>(ROOM_BOOKING_PERSISTENCE_ERROR, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(value = RoomAddException.class)
+    public ResponseEntity<ResultInfo> handleRoomAddException() {
+        return new ResponseEntity<>(ROOM_ADD_ERROR, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = RoomRemovalException.class)

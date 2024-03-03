@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,15 @@ public class RoomsManageController {
         return ResponseEntityUtil.getResponseEntity(roomAdded);
     }
 
-    @PostMapping("removeRoom")
+    /*@PutMapping("modifyRoom")
+    public ResponseEntity<String> modifyRoom(
+            @Valid @NotNull @RequestBody RoomModifyRequest roomModifyRequest
+    ) {
+        final var roomModified = roomManageApplication.modifyRooms(roomModifyRequest);
+        return ResponseEntityUtil.getResponseEntity(null);
+    }*/
+
+    @DeleteMapping("removeRoom")
     public ResponseEntity<String> removeRoom(
             @Valid @NotNull @RequestBody RoomRemoveRequest roomRemoveRequest
     ) {

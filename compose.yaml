@@ -1,0 +1,19 @@
+version: '3.3'
+services:
+  mysql:
+    image: 'mysql:latest'
+    container_name: mysql-db
+    environment:
+      - 'MYSQL_DATABASE=room_bookings'
+      - 'MYSQL_PASSWORD=password'
+      - 'MYSQL_ROOT_PASSWORD=password'
+      - 'MYSQL_USER=user'
+    ports:
+      - '3306:3306'
+  roombookingservice:
+    image: room-booking-service
+    container_name: room-booking-springboot
+    ports:
+      - "8080:8080"
+    links:
+      - mysql
